@@ -1,0 +1,87 @@
+{
+  "plugin_type": "extractors",
+  "name": "tap-quickbooks",
+  "namespace": "tap_quickbooks",
+  "variant": "hotgluexyz",
+  "label": "Quickbooks",
+  "docs": "https://hub.meltano.com/extractors/tap-quickbooks--hotgluexyz",
+  "repo": "https://github.com/hotgluexyz/tap-quickbooks",
+  "pip_url": "git+https://github.com/hotgluexyz/tap-quickbooks.git",
+  "description": "Accounting management platform",
+  "logo_url": "https://hub.meltano.com/assets/logos/extractors/quickbooks.png",
+  "capabilities": [
+    "discover",
+    "properties",
+    "state"
+  ],
+  "settings_group_validation": [
+    [
+      "client_id",
+      "client_secret",
+      "realmId",
+      "refresh_token",
+      "start_date"
+    ]
+  ],
+  "settings": [
+    {
+      "name": "client_id",
+      "kind": "string",
+      "label": "Client ID",
+      "description": "Your Quickbooks Online OAuth client ID",
+      "sensitive": true
+    },
+    {
+      "name": "client_secret",
+      "kind": "string",
+      "label": "Client Secret",
+      "description": "Your Quickbooks Online OAuth client secret",
+      "sensitive": true
+    },
+    {
+      "name": "is_sandbox",
+      "kind": "boolean",
+      "value": false,
+      "label": "Is Sandbox",
+      "description": "Use Quickbooks Sandbox"
+    },
+    {
+      "name": "max_workers",
+      "kind": "integer",
+      "value": 8,
+      "label": "Max Workers",
+      "description": "Maximum number of threads to use"
+    },
+    {
+      "name": "realmId",
+      "label": "Realm ID"
+    },
+    {
+      "name": "refresh_token",
+      "kind": "string",
+      "label": "Refresh Token",
+      "description": "Access to Quickbooks\u2019s API requires a refresh token that will authenticate you with the server.",
+      "sensitive": true
+    },
+    {
+      "name": "select_fields_by_default",
+      "kind": "boolean",
+      "value": true,
+      "label": "Select Fields By Default",
+      "description": "Select by default any new fields discovered in Quickbooks objects"
+    },
+    {
+      "name": "start_date",
+      "kind": "date_iso8601",
+      "label": "Start Date",
+      "description": "Determines how much historical data will be extracted. Please be aware that the larger the time period and amount of data, the longer the initial extraction can be expected to take."
+    },
+    {
+      "name": "state_message_threshold",
+      "kind": "integer",
+      "value": 1000,
+      "label": "State Message Threshold",
+      "description": "Generate a STATE message every N records"
+    }
+  ]
+}

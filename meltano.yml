@@ -1,0 +1,49 @@
+version: 1
+default_environment: dev
+project_id: 1d6f6350-a630-482a-a337-af8a6d2d8519
+environments:
+  - name: dev
+  - name: staging
+  - name: prod
+
+plugins:
+  extractors:
+    - name: tap-quickbooks
+      variant: hotgluexyz
+      pip_url: git+https://github.com/hotgluexyz/tap-quickbooks.git
+      config:
+        start_date: "2023-01-01T00:00:00Z" # Adjust as needed
+      select:
+        - Purchase
+          # - GeneralLedgerAccrualReport
+          # - GeneralLedgerCashReport
+      metadata:
+        Vendor: # Note: Apply to the stream level, not field level
+          replication-method: INCREMENTAL
+          replication-key: MetaData.LastUpdatedTime # Correct field path
+  loaders:
+    - name: target-jsonl
+      variant: andyh1203
+      pip_url: target-jsonl
+  utilities:
+    - name: airflow
+      variant: apache
+      pip_url:
+        git+https://github.com/meltano/airflow-ext.git@main apache-airflow==2.8.1
+        --constraint
+        https://raw.githubusercontent.com/apache/airflow/constraints-2.8.1/constraints-no-providers-${MELTANO__PYTHON_VERSION}.txt
+  mappers:
+    - name: transform-field
+      config:
+        transformations:
+          - stream: Vendor
+            keep: [Id]
+
+jobs:
+  - name: task1
+    tasks:
+      - tap-quickbooks target-jsonl
+schedules:
+  - name: task1-schedule
+    interval: "@daily"
+    job: task1
